@@ -22,10 +22,22 @@ import (
 )
 
 func main() {
+	inputPath := "image.png"
+	outputPath := "normalize.png"
+	normSize := 250
+
+	img, err := loadImage(inputPath)
+	if err != nil {
+		fmt.Println("Error loading image:", err)
+		return
+	}
+	croppedImg := SquareTrimImage(img, normSize)
+	saveImage(croppedImg, outputPath)
+
 	fileServer := http.FileServer(http.Dir("."))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
 	http.Handle("/build", http.HandlerFunc(build))
-	err := http.ListenAndServe(":2003", nil)
+	err = http.ListenAndServe(":2003", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
@@ -50,12 +62,12 @@ func build(w http.ResponseWriter, req *http.Request) {
 	s.Rect(0, 0, width/2+padding*2, height/2+padding*2, "fill:royalblue;rx:10;ry:10;")
 
 	// 画像
-	s.Image(padding, padding*2, width/2, height/4+padding*2, fmt.Sprintf("data:image/png;base64,%s", imageBase()))
+	s.Image(padding, padding*4, width/2, height/4+padding*2, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
 	s.Rect(padding, padding*2, width/2, height/4+padding*2, "fill:none;")
 
 	// 本文
-	s.Rect(padding, 30+height/4, width/2, 16*11, "fill:white;fill-opacity:0.9;rx:5;ry:5")
-	s.Text(padding*2, height/4+padding*6, "旧陣之尾橋跡", "font-size:16px;fill:black")
+	s.Rect(padding, height/4+padding*6, width/2, 16*8, "fill:white;fill-opacity:0.8;rx:5;ry:5")
+	s.Text(padding*2, height/4+padding*8, "旧陣之尾橋跡", "font-size:16px;fill:black")
 
 	// タイトル
 	s.Rect(0, padding, width/2+padding*2, 16*2, "fill:white;fill-opacity:1.0;")
@@ -64,8 +76,8 @@ func build(w http.ResponseWriter, req *http.Request) {
 	s.End()
 }
 
-func imageBase() string {
-	filePath := "./image.png" // PNG画像のパス
+func imageBase(src string) string {
+	filePath := src // PNG画像のパス
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
