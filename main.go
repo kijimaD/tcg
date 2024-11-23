@@ -11,6 +11,8 @@
 package main
 
 import (
+	"encoding/base64"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -22,14 +24,14 @@ import (
 func main() {
 	fileServer := http.FileServer(http.Dir("."))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
-	http.Handle("/circle", http.HandlerFunc(circle))
+	http.Handle("/build", http.HandlerFunc(build))
 	err := http.ListenAndServe(":2003", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
 	}
 }
 
-func circle(w http.ResponseWriter, req *http.Request) {
+func build(w http.ResponseWriter, req *http.Request) {
 	const width = 500
 	const height = 800
 	const padding = 10
@@ -48,7 +50,7 @@ func circle(w http.ResponseWriter, req *http.Request) {
 	s.Rect(0, 0, width/2+padding*2, height/2+padding*2, "fill:royalblue;rx:10;ry:10;")
 
 	// 画像
-	s.Image(padding, padding*2, width/2, height/4+padding*2, "/static/image.png")
+	s.Image(padding, padding*2, width/2, height/4+padding*2, fmt.Sprintf("data:image/png;base64,%s", imageBase()))
 	s.Rect(padding, padding*2, width/2, height/4+padding*2, "fill:none;")
 
 	// 本文
@@ -60,4 +62,15 @@ func circle(w http.ResponseWriter, req *http.Request) {
 	s.Text(width/4, 16*2, "橋跡", "text-anchor:middle;font-size:16px;fill:black")
 
 	s.End()
+}
+
+func imageBase() string {
+	filePath := "./image.png" // PNG画像のパス
+	imageData, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	base64Image := base64.StdEncoding.EncodeToString(imageData)
+
+	return base64Image
 }
