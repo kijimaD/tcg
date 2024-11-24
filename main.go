@@ -21,17 +21,32 @@ import (
 	svg "github.com/ajstarks/svgo"
 )
 
+// カードの幅
+const cardWidth = 250
+
+// カードの縦
+var cardHeight = int(cardWidth * 1.6)
+
+// 余白
+const padding = 10
+
+// キービジュアル
+const keyVisualWidth = 230
+const keyVisualHeight = 230
+
+// 文字の高さ
+const lineHeight = 16
+
 func main() {
 	inputPath := "image.png"
 	outputPath := "normalize.png"
-	normSize := 230
 
 	img, err := loadImage(inputPath)
 	if err != nil {
 		fmt.Println("Error loading image:", err)
 		return
 	}
-	croppedImg := SquareTrimImage(img, normSize)
+	croppedImg := SquareTrimImage(img, keyVisualWidth)
 	saveImage(croppedImg, outputPath)
 
 	fileServer := http.FileServer(http.Dir("."))
@@ -44,55 +59,47 @@ func main() {
 }
 
 func build(w io.Writer) {
-	// カードの幅
-	const cardWidth = 250
-	// カードの縦
-	var cardHeight = int(cardWidth * 1.6)
-	const padding = 10
-	// キービジュアル
-	const keyVisualWidth = 230
-	const keyVisualHeight = 230
-	// 文字の高さ
-	const lineHeight = 16
-
 	s := svg.New(w)
 	s.Start(cardWidth, cardHeight)
 
+	var curY = 0
+
 	// 全体枠
 	body := func() {
-		s.Rect(0, 0, cardWidth, cardHeight, "fill:royalblue;rx:10;ry:10;")
-	}
-
-	// キービジュアル
-	keyVisualBG := func() {
-		s.Rect(padding, padding+lineHeight*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
-	}
-	keyVisual := func() {
-		s.Image(padding, padding+lineHeight*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
-	}
-
-	// 説明文
-	descBG := func() {
-		s.Rect(padding, lineHeight*2+keyVisualWidth+padding, cardWidth-padding*2, lineHeight*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
-	}
-	desc := func() {
-		s.Text(padding*2, lineHeight*2+keyVisualWidth+padding*4, "橋台が残っている", fmt.Sprintf("font-size:%dpx;fill:black", lineHeight))
+		s.Rect(0, curY, cardWidth, cardHeight, "fill:royalblue;rx:10;ry:10;")
 	}
 
 	// タイトル
-	titleBG := func() {
-		s.Rect(0, padding, cardWidth, lineHeight*2, "fill:white;fill-opacity:1.0;stroke:black;")
-	}
 	title := func() {
-		s.Text(cardWidth/4, lineHeight*2, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
+		curY += padding
+		h := lineHeight * 2
+		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:1.0;stroke:black;")
+		s.Text(cardWidth/4, h, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
+		curY += h
+	}
+
+	// キービジュアル
+	keyVisual := func() {
+		curY += padding
+		h := keyVisualHeight
+		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;stroke:gold;")
+		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
+		curY += h
+	}
+
+	// 説明文
+	desc := func() {
+		curY += padding
+		h := lineHeight * 7
+		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+		curY += padding * 2
+		s.Text(padding*2, curY, "橋台が残っている", fmt.Sprintf("font-size:%dpx;fill:black", lineHeight))
+		curY += h
 	}
 
 	body()
-	keyVisualBG()
 	keyVisual()
-	descBG()
 	desc()
-	titleBG()
 	title()
 
 	s.End()
