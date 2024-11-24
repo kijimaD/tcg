@@ -64,16 +64,16 @@ func build(w io.Writer) {
 
 	var curY = 0
 
-	// 全体枠
-	body := func() {
-		s.Rect(0, curY, cardWidth, cardHeight, "fill:darkblue;rx:10;ry:10;")
+	// 背景
+	bg := func() {
+		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./bg.png")))
 	}
 
 	// タイトル
 	title := func() {
 		curY += padding
 		h := lineHeight * 2
-		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:1.0;stroke:black;")
+		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:0.6;rx:8;ry:8;")
 		s.Text(cardWidth/4, h, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
 		s.Text(cardWidth-padding*2, h+6, "遺", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight*2))
 		curY += h
@@ -89,15 +89,14 @@ func build(w io.Writer) {
 
 	// 説明文
 	desc := func() {
-		curY -= padding
 		h := lineHeight * 7
-		s.Rect(padding/2, curY, cardWidth-padding, h, "fill:white;fill-opacity:1.0;rx:8;ry:8;stroke:black;")
+		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:0.6;rx:8;ry:8;stroke:black;stroke-width:2px;")
 		curY += padding * 2
 		s.Text(padding*2, curY, "橋台が残っている。", fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))
 		curY += h
 	}
 
-	body()
+	bg()
 	title()
 	keyVisual()
 	desc()
