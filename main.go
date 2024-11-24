@@ -15,7 +15,6 @@ import (
 	"fmt"
 	"io"
 	"log"
-	"net/http"
 	"os"
 
 	svg "github.com/ajstarks/svgo"
@@ -36,8 +35,17 @@ const keyVisualHeight = 230
 
 // 文字の高さ
 const lineHeight = 16
+const descFontSize = 12
 
 func main() {
+	app := NewMainApp()
+	err := RunMainApp(app, os.Args...)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func normalize() {
 	inputPath := "image.png"
 	outputPath := "normalize.png"
 
@@ -48,14 +56,6 @@ func main() {
 	}
 	croppedImg := SquareTrimImage(img, keyVisualWidth)
 	saveImage(croppedImg, outputPath)
-
-	fileServer := http.FileServer(http.Dir("."))
-	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
-	http.Handle("/check", http.HandlerFunc(check))
-	err = http.ListenAndServe(":2003", nil)
-	if err != nil {
-		log.Fatal("ListenAndServe:", err)
-	}
 }
 
 func build(w io.Writer) {
@@ -66,7 +66,7 @@ func build(w io.Writer) {
 
 	// 全体枠
 	body := func() {
-		s.Rect(0, curY, cardWidth, cardHeight, "fill:royalblue;rx:10;ry:10;")
+		s.Rect(0, curY, cardWidth, cardHeight, "fill:darkblue;rx:10;ry:10;")
 	}
 
 	// タイトル
@@ -75,45 +75,34 @@ func build(w io.Writer) {
 		h := lineHeight * 2
 		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:1.0;stroke:black;")
 		s.Text(cardWidth/4, h, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
+		s.Text(cardWidth-padding*2, h+6, "遺", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight*2))
 		curY += h
 	}
 
 	// キービジュアル
 	keyVisual := func() {
-		curY += padding
 		h := keyVisualHeight
-		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;stroke:gold;")
+		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;")
 		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
 		curY += h
 	}
 
 	// 説明文
 	desc := func() {
-		curY += padding
+		curY -= padding
 		h := lineHeight * 7
-		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+		s.Rect(padding/2, curY, cardWidth-padding, h, "fill:white;fill-opacity:1.0;rx:8;ry:8;stroke:black;")
 		curY += padding * 2
-		s.Text(padding*2, curY, "橋台が残っている", fmt.Sprintf("font-size:%dpx;fill:black", lineHeight))
+		s.Text(padding*2, curY, "橋台が残っている。", fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))
 		curY += h
 	}
 
 	body()
+	title()
 	keyVisual()
 	desc()
-	title()
 
 	s.End()
-}
-
-func check(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "image/svg+xml")
-	f, err := os.Create("test.svg")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-	mw := io.MultiWriter(f, w)
-	build(mw)
 }
 
 func base64nize(src string) string {
