@@ -27,6 +27,7 @@ func NewMainApp() *cli.App {
 	app.Commands = []*cli.Command{
 		CmdBuild,
 		CmdServer,
+		CmdNormalize,
 	}
 	cli.AppHelpTemplate = fmt.Sprintf(`%s
 %s
@@ -44,6 +45,8 @@ func RunMainApp(app *cli.App, args ...string) error {
 	return nil
 }
 
+// ================
+
 var CmdBuild = &cli.Command{
 	Name:        "build",
 	Usage:       "build",
@@ -53,12 +56,26 @@ var CmdBuild = &cli.Command{
 }
 
 func runBuild(_ *cli.Context) error {
-	f, err := os.Create("test.svg")
+	f, err := os.Create("./images/card/jinno.svg")
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer f.Close()
 	build(f)
+
+	return nil
+}
+
+var CmdNormalize = &cli.Command{
+	Name:        "normalize",
+	Usage:       "normalize",
+	Description: "normalize",
+	Action:      runNormalize,
+	Flags:       []cli.Flag{},
+}
+
+func runNormalize(_ *cli.Context) error {
+	normalize()
 
 	return nil
 }

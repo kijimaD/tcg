@@ -46,8 +46,8 @@ func main() {
 }
 
 func normalize() {
-	inputPath := "image.png"
-	outputPath := "normalize.png"
+	inputPath := "./images/key/original/jinno.png"
+	outputPath := "./images/key/normalize/jinno.png"
 
 	img, err := loadImage(inputPath)
 	if err != nil {
@@ -66,7 +66,7 @@ func build(w io.Writer) {
 
 	// 背景
 	bg := func() {
-		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./bg.png")))
+		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/bg.png")))
 	}
 
 	// タイトル
@@ -83,7 +83,7 @@ func build(w io.Writer) {
 	keyVisual := func() {
 		h := keyVisualHeight
 		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;")
-		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
+		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/key/normalize/jinno.png")))
 		curY += h
 	}
 
