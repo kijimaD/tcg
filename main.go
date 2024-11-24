@@ -57,20 +57,41 @@ func build(w io.Writer) {
 	s.Start(width, height)
 
 	// 全体枠
-	s.Rect(0, 0, width+padding*2, height+padding*2, "fill:royalblue;rx:10;ry:10;")
+	body := func() {
+		s.Rect(0, 0, width, height, "fill:royalblue;rx:10;ry:10;")
+	}
 
 	// キービジュアル
-	s.Image(padding, padding+16*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
-	// キービジュアル枠
-	s.Rect(padding, padding+16*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
+	keyVisual := func() {
+		s.Image(padding, padding+16*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
+	}
+	keyVisualBG := func() {
+		s.Rect(padding, padding+16*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
+	}
 
-	// 本文
-	s.Rect(padding, 16*2+keyVisualWidth+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
-	s.Text(padding*2, 16*2+keyVisualWidth+padding*4, "橋台が残っている", "font-size:16px;fill:black")
+	// 説明文
+	desc := func() {
+		s.Text(padding*2, 16*2+keyVisualWidth+padding*4, "橋台が残っている", "font-size:16px;fill:black")
+	}
+	descBG := func() {
+		s.Rect(padding, 16*2+keyVisualWidth+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+	}
 
 	// タイトル
-	s.Rect(0, padding, width+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
-	s.Text(width/4, 16*2, "旧陣之尾橋跡", "text-anchor:middle;font-size:16px;fill:black;")
+	title := func() {
+		s.Text(width/4, 16*2, "旧陣之尾橋跡", "text-anchor:middle;font-size:16px;fill:black;")
+	}
+	titleBG := func() {
+		s.Rect(0, padding, width+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
+	}
+
+	body()
+	keyVisualBG()
+	keyVisual()
+	descBG()
+	desc()
+	titleBG()
+	title()
 
 	s.End()
 }
@@ -86,7 +107,7 @@ func check(w http.ResponseWriter, req *http.Request) {
 	build(mw)
 }
 
-func imageBase(src string) string {
+func base64nize(src string) string {
 	filePath := src // PNG画像のパス
 	imageData, err := os.ReadFile(filePath)
 	if err != nil {
