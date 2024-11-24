@@ -27,7 +27,7 @@ func NewMainApp() *cli.App {
 	app.Commands = []*cli.Command{
 		CmdBuild,
 		CmdServer,
-		CmdNormalize,
+		CmdNormalizeKey,
 	}
 	cli.AppHelpTemplate = fmt.Sprintf(`%s
 %s
@@ -66,16 +66,16 @@ func runBuild(_ *cli.Context) error {
 	return nil
 }
 
-var CmdNormalize = &cli.Command{
-	Name:        "normalize",
-	Usage:       "normalize",
-	Description: "normalize",
-	Action:      runNormalize,
+var CmdNormalizeKey = &cli.Command{
+	Name:        "normalizeKey",
+	Usage:       "normalizeKey",
+	Description: "normalizeKey",
+	Action:      runNormalizeKey,
 	Flags:       []cli.Flag{},
 }
 
-func runNormalize(_ *cli.Context) error {
-	normalize()
+func runNormalizeKey(_ *cli.Context) error {
+	normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
 
 	return nil
 }

@@ -3,12 +3,23 @@ package main
 import (
 	"image"
 	"image/png"
+	"log"
 	"os"
 
 	"golang.org/x/image/draw"
 )
 
-func SquareTrimImage(img image.Image, size int) image.Image {
+// キービジュアル用の画像を用意する
+func normalizeKey(inputPath string, outputPath string) {
+	img, err := loadImage(inputPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	croppedImg := squareTrimImage(img, keyVisualWidth)
+	saveImage(croppedImg, outputPath)
+}
+
+func squareTrimImage(img image.Image, size int) image.Image {
 	// 画像のサイズを取得する
 	width := img.Bounds().Max.X
 	height := img.Bounds().Max.Y

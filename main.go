@@ -45,19 +45,6 @@ func main() {
 	}
 }
 
-func normalize() {
-	inputPath := "./images/key/original/jinno.png"
-	outputPath := "./images/key/normalize/jinno.png"
-
-	img, err := loadImage(inputPath)
-	if err != nil {
-		fmt.Println("Error loading image:", err)
-		return
-	}
-	croppedImg := SquareTrimImage(img, keyVisualWidth)
-	saveImage(croppedImg, outputPath)
-}
-
 func build(w io.Writer) {
 	s := svg.New(w)
 	s.Start(cardWidth, cardHeight)
