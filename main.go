@@ -53,7 +53,7 @@ func build(w io.Writer) {
 
 	// 背景
 	bg := func() {
-		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/bg.png")))
+		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/patternA.png")))
 	}
 
 	// タイトル
