@@ -49,7 +49,9 @@ func build(w io.Writer) {
 	// カードの縦
 	var height = int(width * 1.6)
 	const padding = 10
-	const imageSize = 230
+	// キービジュアル
+	const keyVisualWidth = 230
+	const keyVisualHeight = 230
 
 	s := svg.New(w)
 	s.Start(width, height)
@@ -57,14 +59,14 @@ func build(w io.Writer) {
 	// 全体枠
 	s.Rect(0, 0, width+padding*2, height+padding*2, "fill:royalblue;rx:10;ry:10;")
 
-	// 画像
-	s.Image(padding, padding+16*2, imageSize, imageSize, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
-	// 画像枠
-	s.Rect(padding, padding+16*2, imageSize, imageSize, "fill:none;stroke:gold;")
+	// キービジュアル
+	s.Image(padding, padding+16*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
+	// キービジュアル枠
+	s.Rect(padding, padding+16*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
 
 	// 本文
-	s.Rect(padding, 16*2+imageSize+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
-	s.Text(padding*2, 16*2+imageSize+padding*4, "橋台が残っている", "font-size:16px;fill:black")
+	s.Rect(padding, 16*2+keyVisualWidth+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+	s.Text(padding*2, 16*2+keyVisualWidth+padding*4, "橋台が残っている", "font-size:16px;fill:black")
 
 	// タイトル
 	s.Rect(0, padding, width+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
