@@ -45,44 +45,46 @@ func main() {
 
 func build(w io.Writer) {
 	// カードの幅
-	const width = 250
+	const cardWidth = 250
 	// カードの縦
-	var height = int(width * 1.6)
+	var cardHeight = int(cardWidth * 1.6)
 	const padding = 10
 	// キービジュアル
 	const keyVisualWidth = 230
 	const keyVisualHeight = 230
+	// 文字の高さ
+	const lineHeight = 16
 
 	s := svg.New(w)
-	s.Start(width, height)
+	s.Start(cardWidth, cardHeight)
 
 	// 全体枠
 	body := func() {
-		s.Rect(0, 0, width, height, "fill:royalblue;rx:10;ry:10;")
+		s.Rect(0, 0, cardWidth, cardHeight, "fill:royalblue;rx:10;ry:10;")
 	}
 
 	// キービジュアル
-	keyVisual := func() {
-		s.Image(padding, padding+16*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
-	}
 	keyVisualBG := func() {
-		s.Rect(padding, padding+16*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
+		s.Rect(padding, padding+lineHeight*2, keyVisualWidth, keyVisualHeight, "fill:none;stroke:gold;")
+	}
+	keyVisual := func() {
+		s.Image(padding, padding+lineHeight*2, keyVisualWidth, keyVisualHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./normalize.png")))
 	}
 
 	// 説明文
-	desc := func() {
-		s.Text(padding*2, 16*2+keyVisualWidth+padding*4, "橋台が残っている", "font-size:16px;fill:black")
-	}
 	descBG := func() {
-		s.Rect(padding, 16*2+keyVisualWidth+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+		s.Rect(padding, lineHeight*2+keyVisualWidth+padding, cardWidth-padding*2, lineHeight*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+	}
+	desc := func() {
+		s.Text(padding*2, lineHeight*2+keyVisualWidth+padding*4, "橋台が残っている", fmt.Sprintf("font-size:%dpx;fill:black", lineHeight))
 	}
 
 	// タイトル
-	title := func() {
-		s.Text(width/4, 16*2, "旧陣之尾橋跡", "text-anchor:middle;font-size:16px;fill:black;")
-	}
 	titleBG := func() {
-		s.Rect(0, padding, width+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
+		s.Rect(0, padding, cardWidth, lineHeight*2, "fill:white;fill-opacity:1.0;stroke:black;")
+	}
+	title := func() {
+		s.Text(cardWidth/4, lineHeight*2, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
 	}
 
 	body()
