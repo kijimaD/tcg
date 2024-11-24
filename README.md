@@ -1,13 +1,39 @@
 トレカ生成ツール。
 
-## 背景生成方法
+## command
 
-手動でやる。
+```shell
+go run . -h
+───────────────────────────────────────────────────────
+ _______ _______  ______
+    |    |       |  ____
+    |    |_____  |_____|
+Trading Card Generator by kijimaD
+───────────────────────────────────────────────────────
 
-- 背景テクスチャ画像を入手する。https://free-paper-texture.com/
-- 250x400に近いサイズにリサイズする。https://www.iloveimg.com/ja/resize-image
-- 250x400に切り抜く。https://www.iloveimg.com/ja/crop-image
-- 角を丸くする。https://www.quickpicturetools.com/jp/rounded_corners/
+NAME:
+   tcg - tcg [subcommand] [args]
+
+USAGE:
+   tcg [global options] command [command options]
+
+VERSION:
+   v0.0.1
+
+DESCRIPTION:
+   Trading Card Generation tool
+
+COMMANDS:
+   build         build
+   server        server
+   normalizeKey  normalizeKey
+   normalizeBg   normalizeBg
+   help, h       Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h     show help
+   --version, -v  print the version
+```
 
 ## tree
 
@@ -20,8 +46,11 @@ $ tree
 ├── images
 │   ├── bg
 │   │   ├── normalize
-│   │   │   └── bg.png
+│   │   │   ├── patternA.png
+│   │   │   └── patternB.png
 │   │   └── original
+│   │       ├── patternA.png
+│   │       └── patternB.png
 │   ├── card
 │   │   └── jinno.svg
 │   └── key
@@ -33,4 +62,6 @@ $ tree
 ├── main.go
 ├── normalize.go
 └── README.md
+
+8 directories, 14 files
 ```

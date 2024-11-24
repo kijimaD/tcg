@@ -2,10 +2,10 @@ package main
 
 import (
 	"image"
-	"image/color"
 	"image/png"
 	"os"
 
+	"github.com/fogleman/gg"
 	"golang.org/x/image/draw"
 )
 
@@ -58,51 +58,42 @@ func trimImage(img image.Image, w int, h int) image.Image {
 	return newImage
 }
 
-func roundCornersOnly(img image.Image, radius int) *image.RGBA {
-	// 画像サイズを取得
+// よく理解していない
+func roundCornersWithAntialias(img image.Image, radius int) *image.RGBA {
+	// 元画像のサイズを取得
 	bounds := img.Bounds()
 	width, height := bounds.Dx(), bounds.Dy()
 
-	// 出力用のRGBA画像を作成
-	dst := image.NewRGBA(bounds)
+	// 描画コンテキストを作成
+	dc := gg.NewContext(width, height)
 
-	// 全体をコピー
-	draw.Draw(dst, bounds, img, bounds.Min, draw.Src)
+	// 四隅を丸くするためのパスを作成
+	dc.NewSubPath()
+	dc.MoveTo(float64(radius), 0)                                                           // 左上から始める
+	dc.LineTo(float64(width-radius), 0)                                                     // 上辺
+	dc.QuadraticTo(float64(width), 0, float64(width), float64(radius))                      // 右上の曲線
+	dc.LineTo(float64(width), float64(height-radius))                                       // 右辺
+	dc.QuadraticTo(float64(width), float64(height), float64(width-radius), float64(height)) // 右下の曲線
+	dc.LineTo(float64(radius), float64(height))                                             // 下辺
+	dc.QuadraticTo(0, float64(height), 0, float64(height-radius))                           // 左下の曲線
+	dc.LineTo(0, float64(radius))                                                           // 左辺
+	dc.QuadraticTo(0, 0, float64(radius), 0)                                                // 左上の曲線
+	dc.ClosePath()
 
-	// 各角に異なるマスクを適用
-	applyCornerMask(dst, radius, 0, 0, "tl")                        // 左上 (top-left)
-	applyCornerMask(dst, radius, width-radius, 0, "tr")             // 右上 (top-right)
-	applyCornerMask(dst, radius, 0, height-radius, "bl")            // 左下 (bottom-left)
-	applyCornerMask(dst, radius, width-radius, height-radius, "br") // 右下 (bottom-right)
+	// パスをクリップ領域として設定
+	dc.Clip()
 
-	return dst
-}
+	// 元画像を描画
+	dc.DrawImage(img, 0, 0)
 
-func applyCornerMask(dst *image.RGBA, radius, xOffset, yOffset int, corner string) {
-	// 角ごとの丸みを作成
-	for y := 0; y < radius; y++ {
-		for x := 0; x < radius; x++ {
-			// 円の内外を判定
-			distance := (x-radius)*(x-radius) + (y-radius)*(y-radius)
-			if distance > radius*radius {
-				switch corner {
-				case "tl": // 左上 (top-left)
-					dst.Set(x+xOffset, y+yOffset, color.RGBA{0, 0, 0, 0})
-				case "tr": // 右上 (top-right)
-					dst.Set(xOffset+radius-x-1, y+yOffset, color.RGBA{0, 0, 0, 0})
-				case "bl": // 左下 (bottom-left)
-					dst.Set(x+xOffset, yOffset+radius-y-1, color.RGBA{0, 0, 0, 0})
-				case "br": // 右下 (bottom-right)
-					dst.Set(xOffset+radius-x-1, yOffset+radius-y-1, color.RGBA{0, 0, 0, 0})
-				}
-			}
-		}
-	}
+	// RGBA画像として返す
+	return dc.Image().(*image.RGBA)
 }
 
 func round(img image.Image) image.Image {
-	radius := 14
-	roundedImg := roundCornersOnly(img, radius)
+	// 角を丸くする
+	radius := 16
+	roundedImg := roundCornersWithAntialias(img, radius)
 
 	return roundedImg
 }
