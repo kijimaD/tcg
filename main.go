@@ -24,7 +24,7 @@ import (
 func main() {
 	inputPath := "image.png"
 	outputPath := "normalize.png"
-	normSize := 250
+	normSize := 230
 
 	img, err := loadImage(inputPath)
 	if err != nil {
@@ -44,27 +44,30 @@ func main() {
 }
 
 func build(w io.Writer) {
-	const width = 500
-	const height = 800
+	// カードの幅
+	const width = 250
+	// カードの縦
+	var height = int(width * 1.6)
 	const padding = 10
+	const imageSize = 230
 
 	s := svg.New(w)
-	s.Start(width/2+padding*2, height/2+padding*2)
+	s.Start(width, height)
 
 	// 全体枠
-	s.Rect(0, 0, width/2+padding*2, height/2+padding*2, "fill:royalblue;rx:10;ry:10;")
+	s.Rect(0, 0, width+padding*2, height+padding*2, "fill:royalblue;rx:10;ry:10;")
 
 	// 画像
-	s.Image(padding, padding+16*2, 250, 250, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
+	s.Image(padding, padding+16*2, imageSize, imageSize, fmt.Sprintf("data:image/png;base64,%s", imageBase("./normalize.png")))
 	// 画像枠
-	s.Rect(padding, padding+16*2, width/2, 250, "fill:none;stroke:gold;")
+	s.Rect(padding, padding+16*2, imageSize, imageSize, "fill:none;stroke:gold;")
 
 	// 本文
-	s.Rect(padding, height/4+padding*6, width/2, 16*8, "fill:white;fill-opacity:1.0;rx:8;ry:8")
-	s.Text(padding*2, height/4+padding*10, "橋台が残っている", "font-size:16px;fill:black")
+	s.Rect(padding, 16*2+imageSize+padding, width-padding*2, 16*7, "fill:white;fill-opacity:1.0;rx:8;ry:8")
+	s.Text(padding*2, 16*2+imageSize+padding*4, "橋台が残っている", "font-size:16px;fill:black")
 
 	// タイトル
-	s.Rect(0, padding, width/2+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
+	s.Rect(0, padding, width+padding*2, 16*2, "fill:white;fill-opacity:1.0;stroke:black;")
 	s.Text(width/4, 16*2, "旧陣之尾橋跡", "text-anchor:middle;font-size:16px;fill:black;")
 
 	s.End()
