@@ -58,12 +58,70 @@ var CmdBuild = &cli.Command{
 }
 
 func runBuild(_ *cli.Context) error {
-	f, err := os.Create("./images/card/jinno.svg")
-	if err != nil {
-		log.Fatal(err)
+	{
+		p := Place{
+			Name:          "jinno_a",
+			Title:         "旧陣之尾橋跡",
+			PlaceCategory: "歴",
+			BgPath:        "./images/bg/normalize/pattern_a.png",
+			KeyPath:       "./images/key/normalize/jinno.png",
+			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
+		}
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		p.build(f)
 	}
-	defer f.Close()
-	build(f)
+	{
+		p := Place{
+			Name:          "jinno_b",
+			Title:         "旧陣之尾橋跡",
+			PlaceCategory: "歴",
+			BgPath:        "./images/bg/normalize/pattern_b.png",
+			KeyPath:       "./images/key/normalize/jinno.png",
+			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
+		}
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		p.build(f)
+	}
+	{
+		p := Place{
+			Name:          "okawa_a",
+			Title:         "旧大川トンネル",
+			PlaceCategory: "歴",
+			BgPath:        "./images/bg/normalize/pattern_b.png",
+			KeyPath:       "./images/key/normalize/okawa.png",
+			Descs:         []string{"大川の鉄道トンネル跡。", "両側から閉鎖してあり立ち入りできない。"},
+		}
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		p.build(f)
+	}
+	{
+		p := Place{
+			Name:          "okawa_c",
+			Title:         "旧大川トンネル",
+			PlaceCategory: "歴",
+			BgPath:        "./images/bg/normalize/pattern_c.png",
+			KeyPath:       "./images/key/normalize/okawa.png",
+			Descs:         []string{"大川の鉄道トンネル跡。", "両側から閉鎖してあり立ち入りできない。"},
+		}
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		p.build(f)
+	}
 
 	return nil
 }
@@ -79,9 +137,17 @@ var CmdNormalizeKey = &cli.Command{
 }
 
 func runNormalizeKey(_ *cli.Context) error {
-	err := normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
-	if err != nil {
-		return err
+	{
+		err := normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
+		if err != nil {
+			return err
+		}
+	}
+	{
+		err := normalizeKey("./images/key/original/okawa.png", "./images/key/normalize/okawa.png")
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -98,7 +164,7 @@ var CmdNormalizeBg = &cli.Command{
 }
 
 func runNormalizeBg(_ *cli.Context) error {
-	err := normalizeBg("./images/bg/original/patternA.png", "./images/bg/normalize/patternA.png")
+	err := normalizeBg("./images/bg/original/pattern_c.png", "./images/bg/normalize/pattern_c.png")
 	if err != nil {
 		return err
 	}
@@ -118,8 +184,8 @@ var CmdServer = &cli.Command{
 
 func runServer(_ *cli.Context) error {
 	fileServer := http.FileServer(http.Dir("."))
+	http.Handle("/", http.HandlerFunc(indexHandle))
 	http.Handle("/static/", http.StripPrefix("/static/", fileServer))
-	http.Handle("/check", http.HandlerFunc(checkHandle))
 	err := http.ListenAndServe(":2003", nil)
 	if err != nil {
 		log.Fatal("ListenAndServe:", err)
@@ -128,7 +194,16 @@ func runServer(_ *cli.Context) error {
 	return nil
 }
 
-func checkHandle(w http.ResponseWriter, req *http.Request) {
-	w.Header().Set("Content-Type", "image/svg+xml")
-	build(w)
+func indexHandle(w http.ResponseWriter, req *http.Request) {
+	str := []byte(`
+<html>
+<img src="/static/images/card/jinno_a.svg">
+<img src="/static/images/card/jinno_b.svg">
+<img src="/static/images/card/okawa_a.svg">
+</html>
+`)
+	_, err := w.Write(str)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

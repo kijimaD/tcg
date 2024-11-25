@@ -45,7 +45,22 @@ func main() {
 	}
 }
 
-func build(w io.Writer) {
+type Place struct {
+	// プログラム上で識別する名前。アルファベット
+	Name string
+	// タイトル
+	Title string
+	// カテゴリ
+	PlaceCategory string
+	// カード全体の背景
+	BgPath string
+	// キービジュアル
+	KeyPath string
+	// 説明
+	Descs []string
+}
+
+func (p Place) build(w io.Writer) {
 	s := svg.New(w)
 	s.Start(cardWidth, cardHeight)
 
@@ -53,16 +68,16 @@ func build(w io.Writer) {
 
 	// 背景
 	bg := func() {
-		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/patternA.png")))
+		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize(p.BgPath)))
 	}
 
 	// タイトル
 	title := func() {
 		curY += padding
 		h := lineHeight * 2
-		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:0.6;")
-		s.Text(cardWidth/4, h, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
-		s.Text(cardWidth-padding*2, h+6, "遺", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight*2))
+		s.Rect(0, curY, cardWidth, h, "fill:black;fill-opacity:0.6;")
+		s.Text(cardWidth/4, h, p.Title, fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:white;", lineHeight))
+		s.Text(cardWidth-padding*2, h+6, p.PlaceCategory, fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:white;", lineHeight*2))
 		curY += h
 	}
 
@@ -70,7 +85,7 @@ func build(w io.Writer) {
 	keyVisual := func() {
 		h := keyVisualHeight
 		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;")
-		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/key/normalize/jinno.png")))
+		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize(p.KeyPath)))
 		curY += h
 	}
 
@@ -79,7 +94,10 @@ func build(w io.Writer) {
 		h := lineHeight * 7
 		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:0.6;rx:8;ry:8;stroke:black;stroke-width:2px;")
 		curY += padding * 2
-		s.Text(padding*2, curY, "橋台が残っている。", fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))
+		for _, desc := range p.Descs {
+			s.Text(padding*2, curY, desc, fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))
+			curY += lineHeight
+		}
 		curY += h
 	}
 
