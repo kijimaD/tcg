@@ -60,7 +60,7 @@ var CmdBuild = &cli.Command{
 func runBuild(_ *cli.Context) error {
 	{
 		p := Place{
-			Name:          "jinno_a",
+			Name:          "jinno",
 			Title:         "旧陣之尾橋跡",
 			PlaceCategory: "歴",
 			BgPath:        "./images/bg/normalize/pattern_a.png",
@@ -76,12 +76,12 @@ func runBuild(_ *cli.Context) error {
 	}
 	{
 		p := Place{
-			Name:          "jinno_b",
-			Title:         "旧陣之尾橋跡",
+			Name:          "nabeishi",
+			Title:         "鍋石",
 			PlaceCategory: "歴",
 			BgPath:        "./images/bg/normalize/pattern_b.png",
-			KeyPath:       "./images/key/normalize/jinno.png",
-			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
+			KeyPath:       "./images/key/normalize/nabeishi.png",
+			Descs:         []string{"阿久根の七不思議の1つ。", "鍋の形をした岩。"},
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
@@ -92,28 +92,32 @@ func runBuild(_ *cli.Context) error {
 	}
 	{
 		p := Place{
-			Name:          "okawa_a",
-			Title:         "旧大川トンネル",
-			PlaceCategory: "歴",
-			BgPath:        "./images/bg/normalize/pattern_b.png",
-			KeyPath:       "./images/key/normalize/okawa.png",
-			Descs:         []string{"大川の鉄道トンネル跡。", "両側から閉鎖してあり立ち入りできない。"},
-		}
-		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		p.build(f)
-	}
-	{
-		p := Place{
-			Name:          "okawa_c",
-			Title:         "旧大川トンネル",
-			PlaceCategory: "歴",
+			Name:          "r499",
+			Title:         "国道499号線",
+			PlaceCategory: "景",
 			BgPath:        "./images/bg/normalize/pattern_c.png",
+			KeyPath:       "./images/key/normalize/r499.png",
+			Descs: []string{
+				"阿久根市内の陸上区間はわずか62m",
+				"しかない国道。",
+				"市内で唯一の2車線道路区間。",
+			},
+		}
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer f.Close()
+		p.build(f)
+	}
+	{
+		p := Place{
+			Name:          "okawa",
+			Title:         "旧大川トンネル",
+			PlaceCategory: "歴",
+			BgPath:        "./images/bg/normalize/pattern_d.png",
 			KeyPath:       "./images/key/normalize/okawa.png",
-			Descs:         []string{"大川の鉄道トンネル跡。", "両側から閉鎖してあり立ち入りできない。"},
+			Descs:         []string{"大川の鉄道トンネル跡。", "両側を閉鎖してあり侵入はできない。"},
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
@@ -149,6 +153,18 @@ func runNormalizeKey(_ *cli.Context) error {
 			return err
 		}
 	}
+	{
+		err := normalizeKey("./images/key/original/nabeishi.png", "./images/key/normalize/nabeishi.png")
+		if err != nil {
+			return err
+		}
+	}
+	{
+		err := normalizeKey("./images/key/original/r499.png", "./images/key/normalize/r499.png")
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
@@ -178,6 +194,12 @@ func runNormalizeBg(_ *cli.Context) error {
 	}
 	{
 		err := normalizeBg("./images/bg/original/pattern_c.png", "./images/bg/normalize/pattern_c.png")
+		if err != nil {
+			return err
+		}
+	}
+	{
+		err := normalizeBg("./images/bg/original/pattern_d.png", "./images/bg/normalize/pattern_d.png")
 		if err != nil {
 			return err
 		}
@@ -222,10 +244,10 @@ func indexHandle(w http.ResponseWriter, req *http.Request) {
     </head>
     <body>
         <ul id="images">
-            <li><img src="/static/images/card/jinno_a.svg"></li>
-            <li><img src="/static/images/card/jinno_b.svg"></li>
-            <li><img src="/static/images/card/okawa_a.svg"></li>
-            <li><img src="/static/images/card/okawa_c.svg"></li>
+            <li><img src="/static/images/card/jinno.svg"></li>
+            <li><img src="/static/images/card/nabeishi.svg"></li>
+            <li><img src="/static/images/card/okawa.svg"></li>
+            <li><img src="/static/images/card/r499.svg"></li>
         </ul>
     </body>
     <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
