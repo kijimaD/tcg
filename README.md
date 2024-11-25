@@ -1,5 +1,8 @@
 トレカ生成ツール。
 
+<img src="./images/card/jinno.svg" /><img src="./images/card/nabeishi.svg" />
+<img src="./images/card/okawa.svg" /><img src="./images/card/r499.svg" />
+
 ## command
 
 ```shell
