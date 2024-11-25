@@ -5,6 +5,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
+	"strings"
 
 	"github.com/urfave/cli/v2"
 )
@@ -141,26 +143,20 @@ var CmdNormalizeKey = &cli.Command{
 }
 
 func runNormalizeKey(_ *cli.Context) error {
-	{
-		err := normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
-		if err != nil {
-			return err
-		}
+	const srcDir = "./images/key/original"
+	const destDir = "./images/key/normalize"
+
+	c, err := os.ReadDir(srcDir)
+	if err != nil {
+		return err
 	}
-	{
-		err := normalizeKey("./images/key/original/okawa.png", "./images/key/normalize/okawa.png")
-		if err != nil {
-			return err
+	for _, entry := range c {
+		if !strings.HasSuffix(entry.Name(), ".png") {
+			return fmt.Errorf("%sに.png以外のファイルが含まれている: %s", srcDir, entry.Name())
 		}
-	}
-	{
-		err := normalizeKey("./images/key/original/nabeishi.png", "./images/key/normalize/nabeishi.png")
-		if err != nil {
-			return err
-		}
-	}
-	{
-		err := normalizeKey("./images/key/original/r499.png", "./images/key/normalize/r499.png")
+		src := path.Join(srcDir, entry.Name())
+		dest := path.Join(destDir, entry.Name())
+		err := normalizeKey(src, dest)
 		if err != nil {
 			return err
 		}
@@ -180,26 +176,20 @@ var CmdNormalizeBg = &cli.Command{
 }
 
 func runNormalizeBg(_ *cli.Context) error {
-	{
-		err := normalizeBg("./images/bg/original/pattern_a.png", "./images/bg/normalize/pattern_a.png")
-		if err != nil {
-			return err
-		}
+	const srcDir = "./images/bg/original"
+	const destDir = "./images/bg/normalize"
+
+	c, err := os.ReadDir(srcDir)
+	if err != nil {
+		return err
 	}
-	{
-		err := normalizeBg("./images/bg/original/pattern_b.png", "./images/bg/normalize/pattern_b.png")
-		if err != nil {
-			return err
+	for _, entry := range c {
+		if !strings.HasSuffix(entry.Name(), ".png") {
+			return fmt.Errorf("%sに.png以外のファイルが含まれている: %s", srcDir, entry.Name())
 		}
-	}
-	{
-		err := normalizeBg("./images/bg/original/pattern_c.png", "./images/bg/normalize/pattern_c.png")
-		if err != nil {
-			return err
-		}
-	}
-	{
-		err := normalizeBg("./images/bg/original/pattern_d.png", "./images/bg/normalize/pattern_d.png")
+		src := path.Join(srcDir, entry.Name())
+		dest := path.Join(destDir, entry.Name())
+		err := normalizeBg(src, dest)
 		if err != nil {
 			return err
 		}
@@ -228,37 +218,4 @@ func runServer(_ *cli.Context) error {
 	}
 
 	return nil
-}
-
-func indexHandle(w http.ResponseWriter, req *http.Request) {
-	str := []byte(`
-<!DOCTYPE html>
-<html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <link  href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.css" rel="stylesheet">
-        <style>
-         ul { list-style-type: none; }
-         li { display: inline-block; }
-        </style>
-    </head>
-    <body>
-        <ul id="images">
-            <li><img src="/static/images/card/jinno.svg"></li>
-            <li><img src="/static/images/card/nabeishi.svg"></li>
-            <li><img src="/static/images/card/okawa.svg"></li>
-            <li><img src="/static/images/card/r499.svg"></li>
-        </ul>
-    </body>
-    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.min.js"></script>
-    <script>
-     var viewer = new Viewer(document.getElementById('images'));
-    </script>
-</html>
-`)
-	_, err := w.Write(str)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
