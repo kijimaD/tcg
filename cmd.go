@@ -164,9 +164,23 @@ var CmdNormalizeBg = &cli.Command{
 }
 
 func runNormalizeBg(_ *cli.Context) error {
-	err := normalizeBg("./images/bg/original/pattern_c.png", "./images/bg/normalize/pattern_c.png")
-	if err != nil {
-		return err
+	{
+		err := normalizeBg("./images/bg/original/pattern_a.png", "./images/bg/normalize/pattern_a.png")
+		if err != nil {
+			return err
+		}
+	}
+	{
+		err := normalizeBg("./images/bg/original/pattern_b.png", "./images/bg/normalize/pattern_b.png")
+		if err != nil {
+			return err
+		}
+	}
+	{
+		err := normalizeBg("./images/bg/original/pattern_c.png", "./images/bg/normalize/pattern_c.png")
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
@@ -196,10 +210,29 @@ func runServer(_ *cli.Context) error {
 
 func indexHandle(w http.ResponseWriter, req *http.Request) {
 	str := []byte(`
-<html>
-<img src="/static/images/card/jinno_a.svg">
-<img src="/static/images/card/jinno_b.svg">
-<img src="/static/images/card/okawa_a.svg">
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <link  href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.css" rel="stylesheet">
+        <style>
+         ul { list-style-type: none; }
+         li { display: inline-block; }
+        </style>
+    </head>
+    <body>
+        <ul id="images">
+            <li><img src="/static/images/card/jinno_a.svg"></li>
+            <li><img src="/static/images/card/jinno_b.svg"></li>
+            <li><img src="/static/images/card/okawa_a.svg"></li>
+            <li><img src="/static/images/card/okawa_c.svg"></li>
+        </ul>
+    </body>
+    <script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.min.js"></script>
+    <script>
+     var viewer = new Viewer(document.getElementById('images'));
+    </script>
 </html>
 `)
 	_, err := w.Write(str)

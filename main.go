@@ -84,7 +84,7 @@ func (p Place) build(w io.Writer) {
 	// キービジュアル
 	keyVisual := func() {
 		h := keyVisualHeight
-		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;")
+		s.Rect(padding, curY, keyVisualWidth, h, "fill:none;stroke:black;")
 		s.Image(padding, curY, keyVisualWidth, h, fmt.Sprintf("data:image/png;base64,%s", base64nize(p.KeyPath)))
 		curY += h
 	}
@@ -92,7 +92,7 @@ func (p Place) build(w io.Writer) {
 	// 説明文
 	desc := func() {
 		h := lineHeight * 7
-		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:0.6;rx:8;ry:8;stroke:black;stroke-width:2px;")
+		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:0.6;rx:4;ry:4;stroke:black;stroke-width:1px;")
 		curY += padding * 2
 		for _, desc := range p.Descs {
 			s.Text(padding*2, curY, desc, fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))

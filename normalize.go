@@ -27,7 +27,7 @@ func normalizeBg(inputPath string, outputPath string) error {
 	if err != nil {
 		return err
 	}
-	newImg := trimImage(img, 250, 400)
+	newImg := trimImage(img, cardWidth*4, cardHeight*4)
 	newImg = round(newImg)
 	saveImage(newImg, outputPath)
 
