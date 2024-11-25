@@ -53,14 +53,14 @@ func build(w io.Writer) {
 
 	// 背景
 	bg := func() {
-		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/bg.png")))
+		s.Image(0, 0, cardWidth, cardHeight, fmt.Sprintf("data:image/png;base64,%s", base64nize("./images/bg/normalize/patternA.png")))
 	}
 
 	// タイトル
 	title := func() {
 		curY += padding
 		h := lineHeight * 2
-		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:0.6;rx:8;ry:8;")
+		s.Rect(0, curY, cardWidth, h, "fill:white;fill-opacity:0.6;")
 		s.Text(cardWidth/4, h, "旧陣之尾橋跡", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight))
 		s.Text(cardWidth-padding*2, h+6, "遺", fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:black;", lineHeight*2))
 		curY += h

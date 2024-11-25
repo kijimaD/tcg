@@ -12,7 +12,8 @@ import (
 const splash = `───────────────────────────────────────────────────────
  _______ _______  ______
     |    |       |  ____
-    |    |_____  |_____| @kijimaD
+    |    |_____  |_____|
+Trading Card Generator by kijimaD
 ───────────────────────────────────────────────────────
 `
 
@@ -28,6 +29,7 @@ func NewMainApp() *cli.App {
 		CmdBuild,
 		CmdServer,
 		CmdNormalizeKey,
+		CmdNormalizeBg,
 	}
 	cli.AppHelpTemplate = fmt.Sprintf(`%s
 %s
@@ -66,6 +68,8 @@ func runBuild(_ *cli.Context) error {
 	return nil
 }
 
+// ================
+
 var CmdNormalizeKey = &cli.Command{
 	Name:        "normalizeKey",
 	Usage:       "normalizeKey",
@@ -75,7 +79,29 @@ var CmdNormalizeKey = &cli.Command{
 }
 
 func runNormalizeKey(_ *cli.Context) error {
-	normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
+	err := normalizeKey("./images/key/original/jinno.png", "./images/key/normalize/jinno.png")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// ================
+
+var CmdNormalizeBg = &cli.Command{
+	Name:        "normalizeBg",
+	Usage:       "normalizeBg",
+	Description: "normalizeBg",
+	Action:      runNormalizeBg,
+	Flags:       []cli.Flag{},
+}
+
+func runNormalizeBg(_ *cli.Context) error {
+	err := normalizeBg("./images/bg/original/patternA.png", "./images/bg/normalize/patternA.png")
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
