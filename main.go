@@ -76,8 +76,8 @@ func (p Place) build(w io.Writer) {
 		curY += padding
 		h := lineHeight * 2
 		s.Rect(0, curY, cardWidth, h, "fill:black;fill-opacity:0.6;")
-		s.Text(cardWidth/4, h, p.Title, fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:white;", lineHeight))
-		s.Text(cardWidth-padding*2, h+6, p.PlaceCategory, fmt.Sprintf("text-anchor:middle;font-size:%dpx;fill:white;", lineHeight*2))
+		s.Text(padding, h, p.Title, fmt.Sprintf("font-size:%dpx;fill:white;", lineHeight))
+		s.Text(cardWidth-padding*4, h+6, p.PlaceCategory, fmt.Sprintf("font-size:%dpx;fill:white;", lineHeight*2))
 		curY += h
 	}
 
