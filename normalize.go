@@ -15,7 +15,7 @@ func normalizeKey(inputPath string, outputPath string) error {
 	if err != nil {
 		return err
 	}
-	croppedImg := trimImage(img, keyVisualWidth, keyVisualHeight)
+	croppedImg := trimImage(img, keyVisualWidth*4, keyVisualHeight*4)
 	saveImage(croppedImg, outputPath)
 
 	return nil
