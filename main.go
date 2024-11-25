@@ -58,6 +58,8 @@ type Place struct {
 	KeyPath string
 	// 説明
 	Descs []string
+	// 所在地
+	Location string
 }
 
 func (p Place) build(w io.Writer) {
@@ -91,20 +93,28 @@ func (p Place) build(w io.Writer) {
 
 	// 説明文
 	desc := func() {
-		h := lineHeight * 7
+		originalY := curY
+		h := lineHeight * 6
 		s.Rect(padding, curY, cardWidth-padding*2, h, "fill:white;fill-opacity:0.6;rx:4;ry:4;stroke:black;stroke-width:1px;")
 		curY += padding * 2
 		for _, desc := range p.Descs {
 			s.Text(padding*2, curY, desc, fmt.Sprintf("font-size:%dpx;fill:black;", descFontSize))
 			curY += lineHeight
 		}
-		curY += h
+		curY = originalY + h
+	}
+
+	// 所在地
+	location := func() {
+		curY += lineHeight
+		s.Text(padding, curY, fmt.Sprintf("@%s", p.Location), fmt.Sprintf("font-size:%dpx;fill:white;fill-opacity:0.6", descFontSize))
 	}
 
 	bg()
 	title()
 	keyVisual()
 	desc()
+	location()
 
 	s.End()
 }

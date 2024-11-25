@@ -68,6 +68,7 @@ func runBuild(_ *cli.Context) error {
 			BgPath:        "./images/bg/normalize/pattern_a.png",
 			KeyPath:       "./images/key/normalize/jinno.png",
 			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
+			Location:      "鹿児島県阿久根市折口",
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
@@ -84,6 +85,7 @@ func runBuild(_ *cli.Context) error {
 			BgPath:        "./images/bg/normalize/pattern_b.png",
 			KeyPath:       "./images/key/normalize/nabeishi.png",
 			Descs:         []string{"阿久根の七不思議の1つ。", "鍋の形をした岩。"},
+			Location:      "鹿児島県阿久根市折口",
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
@@ -104,6 +106,7 @@ func runBuild(_ *cli.Context) error {
 				"しかない国道。",
 				"市内で唯一の2車線道路区間。",
 			},
+			Location: "鹿児島県阿久根市栄町",
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
@@ -115,11 +118,12 @@ func runBuild(_ *cli.Context) error {
 	{
 		p := Place{
 			Name:          "okawa",
-			Title:         "旧大川トンネル",
+			Title:         "旧尻無トンネル",
 			PlaceCategory: "歴",
 			BgPath:        "./images/bg/normalize/pattern_d.png",
 			KeyPath:       "./images/key/normalize/okawa.png",
-			Descs:         []string{"大川の鉄道トンネル跡。", "両側を閉鎖してあり侵入はできない。"},
+			Descs:         []string{"鉄道トンネル跡。", "両側の封鎖で入ることはできない。"},
+			Location:      "鹿児島県阿久根市大川",
 		}
 		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
 		if err != nil {
