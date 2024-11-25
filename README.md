@@ -1,7 +1,13 @@
 トレカ生成ツール。
 
-<img src="./images/card/jinno.svg" /><img src="./images/card/nabeishi.svg" />
-<img src="./images/card/okawa.svg" /><img src="./images/card/r499.svg" />
+<table>
+<tr>
+<td><img src="./images/card/jinno.svg" /></td>
+<td><img src="./images/card/nabeishi.svg" /></td>
+<td><img src="./images/card/okawa.svg" /></td>
+<td><img src="./images/card/r499.svg" /></td>
+</tr>
+</table>
 
 ## command
 
