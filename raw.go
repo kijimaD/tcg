@@ -1,6 +1,8 @@
 package main
 
-import "github.com/BurntSushi/toml"
+import (
+	"github.com/BurntSushi/toml"
+)
 
 type RawMaster struct {
 	Raws       Raws
@@ -22,6 +24,10 @@ func Load(content string) (RawMaster, error) {
 
 	for i, place := range rw.Raws.Places {
 		rw.PlaceIndex[place.Name] = i
+
+		if err := placeCategory(place.PlaceCategory).Valid(); err != nil {
+			return rw, err
+		}
 	}
 
 	return rw, nil

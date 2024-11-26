@@ -11,6 +11,7 @@ func TestLoad(t *testing.T) {
 [[place]]
 Name = "example1"
 Title = "title1"
+PlaceCategory = "HISTORY"
 BgPath = "bgpath1"
 KeyPath = "keypath1"
 Descs = ["desc1"]
@@ -19,6 +20,7 @@ Location = "location1"
 [[place]]
 Name = "example2"
 Title = "title2"
+PlaceCategory = "SCENIC"
 BgPath = "bgpath2"
 KeyPath = "keypath2"
 Descs = ["desc2"]
@@ -31,20 +33,22 @@ Location = "location2"
 		Raws: Raws{
 			Places: []Place{
 				Place{
-					Name:     "example1",
-					Title:    "title1",
-					BgPath:   "bgpath1",
-					KeyPath:  "keypath1",
-					Descs:    []string{"desc1"},
-					Location: "location1",
+					Name:          "example1",
+					Title:         "title1",
+					PlaceCategory: placeCategoryHistory,
+					BgPath:        "bgpath1",
+					KeyPath:       "keypath1",
+					Descs:         []string{"desc1"},
+					Location:      "location1",
 				},
 				Place{
-					Name:     "example2",
-					Title:    "title2",
-					BgPath:   "bgpath2",
-					KeyPath:  "keypath2",
-					Descs:    []string{"desc2"},
-					Location: "location2",
+					Name:          "example2",
+					Title:         "title2",
+					PlaceCategory: placeCategoryScenic,
+					BgPath:        "bgpath2",
+					KeyPath:       "keypath2",
+					Descs:         []string{"desc2"},
+					Location:      "location2",
 				},
 			},
 		},

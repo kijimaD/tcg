@@ -2,10 +2,11 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
 )
 
-var ErrInvalidEnumType = errors.New("enumに無効な値が指定された")
+var ErrInvalidEnumType = errors.New("rawファイルでenumに無効な値が指定された")
 
 type placeCategory string
 
@@ -24,7 +25,7 @@ func (pc placeCategory) Valid() error {
 		return nil
 	}
 
-	return ErrInvalidEnumType
+	return fmt.Errorf("%w: %s", ErrInvalidEnumType, pc)
 }
 
 func (pc placeCategory) String() string {
