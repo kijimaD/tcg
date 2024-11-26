@@ -12,8 +12,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: '1.23'
-      - name: build
-        run: go build .
       - name: remove
         run: |
           rm ./images/bg/normalize/*
@@ -26,3 +24,15 @@ jobs:
           go run . build
       - name: check diff
         run: git diff --exit-code
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+      - name: build
+        run: go build .
+      - name: test
+        run: go test -v
