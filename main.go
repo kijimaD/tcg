@@ -51,7 +51,7 @@ type Place struct {
 	// タイトル
 	Title string
 	// カテゴリ
-	PlaceCategory string
+	PlaceCategory placeCategory
 	// カード全体の背景
 	BgPath string
 	// キービジュアル
@@ -79,7 +79,7 @@ func (p Place) build(w io.Writer) {
 		h := lineHeight * 2
 		s.Rect(0, curY, cardWidth, h, "fill:black;fill-opacity:0.6;")
 		s.Text(padding, h, p.Title, fmt.Sprintf("font-size:%dpx;fill:white;", lineHeight))
-		s.Text(cardWidth-padding*4, h+6, p.PlaceCategory, fmt.Sprintf("font-size:%dpx;fill:white;", lineHeight*2))
+		s.Text(cardWidth-padding*4, h+6, p.PlaceCategory.String(), fmt.Sprintf("font-size:%dpx;fill:white;", lineHeight*2))
 		curY += h
 	}
 

@@ -64,7 +64,7 @@ func runBuild(_ *cli.Context) error {
 		p := Place{
 			Name:          "jinno",
 			Title:         "旧陣之尾橋跡",
-			PlaceCategory: "歴",
+			PlaceCategory: placeCategoryHistory,
 			BgPath:        "./images/bg/normalize/pattern_a.png",
 			KeyPath:       "./images/key/normalize/jinno.png",
 			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
@@ -81,7 +81,7 @@ func runBuild(_ *cli.Context) error {
 		p := Place{
 			Name:          "nabeishi",
 			Title:         "鍋石",
-			PlaceCategory: "歴",
+			PlaceCategory: placeCategoryHistory,
 			BgPath:        "./images/bg/normalize/pattern_b.png",
 			KeyPath:       "./images/key/normalize/nabeishi.png",
 			Descs:         []string{"阿久根の七不思議の1つ。", "鍋の形をした岩。"},
@@ -98,7 +98,7 @@ func runBuild(_ *cli.Context) error {
 		p := Place{
 			Name:          "r499",
 			Title:         "国道499号線",
-			PlaceCategory: "景",
+			PlaceCategory: placeCategoryScenic,
 			BgPath:        "./images/bg/normalize/pattern_c.png",
 			KeyPath:       "./images/key/normalize/r499.png",
 			Descs: []string{
@@ -119,7 +119,7 @@ func runBuild(_ *cli.Context) error {
 		p := Place{
 			Name:          "okawa",
 			Title:         "旧尻無トンネル",
-			PlaceCategory: "歴",
+			PlaceCategory: placeCategoryHistory,
 			BgPath:        "./images/bg/normalize/pattern_d.png",
 			KeyPath:       "./images/key/normalize/okawa.png",
 			Descs:         []string{"鉄道トンネル跡。", "両側の封鎖で入ることはできない。"},
