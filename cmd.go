@@ -60,77 +60,21 @@ var CmdBuild = &cli.Command{
 }
 
 func runBuild(_ *cli.Context) error {
-	{
-		p := Place{
-			Name:          "jinno",
-			Title:         "旧陣之尾橋跡",
-			PlaceCategory: "歴",
-			BgPath:        "./images/bg/normalize/pattern_a.png",
-			KeyPath:       "./images/key/normalize/jinno.png",
-			Descs:         []string{"折口川に架かっていた橋の跡。", "橋台が残っている。"},
-			Location:      "鹿児島県阿久根市折口",
-		}
-		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		p.build(f)
+	bytes, err := os.ReadFile("./raw.toml")
+	if err != nil {
+		return (err)
 	}
-	{
-		p := Place{
-			Name:          "nabeishi",
-			Title:         "鍋石",
-			PlaceCategory: "歴",
-			BgPath:        "./images/bg/normalize/pattern_b.png",
-			KeyPath:       "./images/key/normalize/nabeishi.png",
-			Descs:         []string{"阿久根の七不思議の1つ。", "鍋の形をした岩。"},
-			Location:      "鹿児島県阿久根市折口",
-		}
-		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		p.build(f)
+	rawMaster, err := Load(string(bytes))
+	if err != nil {
+		return err
 	}
-	{
-		p := Place{
-			Name:          "r499",
-			Title:         "国道499号線",
-			PlaceCategory: "景",
-			BgPath:        "./images/bg/normalize/pattern_c.png",
-			KeyPath:       "./images/key/normalize/r499.png",
-			Descs: []string{
-				"阿久根市内の陸上区間はわずか62m",
-				"しかない国道。",
-				"市内で唯一の2車線道路区間。",
-			},
-			Location: "鹿児島県阿久根市栄町",
-		}
-		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
+	for _, place := range rawMaster.Raws.Places {
+		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", place.Name))
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		defer f.Close()
-		p.build(f)
-	}
-	{
-		p := Place{
-			Name:          "okawa",
-			Title:         "旧尻無トンネル",
-			PlaceCategory: "歴",
-			BgPath:        "./images/bg/normalize/pattern_d.png",
-			KeyPath:       "./images/key/normalize/okawa.png",
-			Descs:         []string{"鉄道トンネル跡。", "両側の封鎖で入ることはできない。"},
-			Location:      "鹿児島県阿久根市大川",
-		}
-		f, err := os.Create(fmt.Sprintf("./images/card/%s.svg", p.Name))
-		if err != nil {
-			log.Fatal(err)
-		}
-		defer f.Close()
-		p.build(f)
+		place.build(f)
 	}
 
 	return nil
