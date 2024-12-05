@@ -89,11 +89,17 @@ func (p Place) build(w io.Writer) {
 		s.Text(padding, curY, fmt.Sprintf("@%s", p.Location), fmt.Sprintf("font-size:%dpx;fill:white;fill-opacity:0.6", descFontSize))
 	}
 
+	// 発行
+	author := func() {
+		s.Text(cardWidth-padding*6, curY, fmt.Sprintf("%s", "©kijimad"), fmt.Sprintf("font-size:%dpx;fill:black;fill-opacity:0.6", descFontSize-2))
+	}
+
 	bg()
 	title()
 	keyVisual()
 	desc()
 	location()
+	author()
 
 	s.End()
 }
